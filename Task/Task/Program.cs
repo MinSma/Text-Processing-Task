@@ -14,7 +14,7 @@ namespace Task
             string text;
             int symbolsCountInRow;
 
-            ReadFile(PRIMARY_DATA_FILE, out text, out symbolsCountInRow);
+            (text, symbolsCountInRow) = ReadFile(PRIMARY_DATA_FILE);
 
             List<string> textInPairs = SplitTextIntoParts(text, symbolsCountInRow);
 
@@ -22,10 +22,10 @@ namespace Task
             PrintToFile(RESULTS_DATA_FILE, textInPairs);
         }
 
-        public static void ReadFile(string fileName, out string text, out int symbolsCountInRow)
+        public static (string text, int symbolsCountInRow) ReadFile(string fileName)
         {
-            text = "";
-            symbolsCountInRow = 0;
+            string text = "";
+            int symbolsCountInRow = 0;
 
             try
             {
@@ -42,6 +42,8 @@ namespace Task
             {
                 Console.WriteLine("Error. Wrong file data format!");
             }
+
+            return (text, symbolsCountInRow);
         }
 
         public static List<string> SplitTextIntoParts(string text, int symbolsCountInRow)
@@ -53,11 +55,12 @@ namespace Task
 
             for (int i = 0; i < textInWords.Count; i++)
             {
+                // if the first word
                 if (textInPairs.Count == 0)
                 {
                     FirstWordProcessing(i, textInWords, textInPairs, symbolsCountInRow);
                 }
-                else
+                else // all other words after the first one
                 {
                     WordsAfterFirstWordProcessing(i, textInWords, textInPairs, symbolsCountInRow);
                 }
@@ -68,11 +71,12 @@ namespace Task
 
         public static void FirstWordProcessing(int index, List<string> textInWords, List<string> textInPairs, int symbolsCountInRow)
         {
+            // if there is enough room for word to fill in one row
             if (textInWords[index].Length <= symbolsCountInRow)
             {
                 textInPairs.Add(textInWords[index] + " ");
             }
-            else
+            else // if there is not enough room for word to fill in one row
             {
                 AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
             }
@@ -80,20 +84,20 @@ namespace Task
 
         public static void WordsAfterFirstWordProcessing(int index, List<string> textInWords, List<string> textInPairs, int symbolsCountInRow)
         {
-            int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length;
+            int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length; // number of empty space in the row
 
-            if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow)
+            if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow) // if word half size is bigger than empty space in the row
             {
-                if (textInWords[index].Length <= symbolsCountInRow)
+                if (textInWords[index].Length <= symbolsCountInRow) // if word size is lower than max row size
                 {
                     textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
                 }
-                else
+                else // if word size is bigger than max row size
                 {
                     AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
                 }
             }
-            else
+            else // if word half size is lower than empty space in the row
             {
                 textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
             }
@@ -103,6 +107,9 @@ namespace Task
         {
             while (word.Length > 0)
             {
+                // add word to textInParts list and
+                // if word length is equal or bigger than symbolsCountInRow than reduce it by symbolsCountInRow value
+                // otherwise reduce it by word's length
                 word = word.Length >= symbolsCountInRow ? 
                     ReduceWordAndAddWordToList(textInPairs, word, symbolsCountInRow) : 
                     ReduceWordAndAddWordToList(textInPairs, word, word.Length);
@@ -111,9 +118,11 @@ namespace Task
 
         public static string ReduceWordAndAddWordToList(List<string> textInPairs, string word, int length)
         {
+            // Adds word to list and adds white space at the end of word
             textInPairs.Add(word.Substring(0, length));
             textInPairs[textInPairs.Count - 1] += " ";
 
+            // Reduces word by given length
             return word.Remove(0, length);
         }
 
