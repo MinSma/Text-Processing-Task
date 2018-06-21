@@ -6,17 +6,20 @@ namespace Task
 {
     class Program
     {
+        const string PRIMARY_DATA_FILE = "duomenys.txt";
+        const string RESULTS_DATA_FILE = "rez.txt";
+
         static void Main(string[] args)
         {
             string text;
             int symbolsCountInRow;
 
-            ReadFile("duomenys.txt", out text, out symbolsCountInRow);
+            ReadFile(PRIMARY_DATA_FILE, out text, out symbolsCountInRow);
 
             List<string> textInPairs = SplitTextIntoParts(text, symbolsCountInRow);
 
             PrintToConsole(textInPairs);
-            PrintToFile("rez.txt", textInPairs);
+            PrintToFile(RESULTS_DATA_FILE, textInPairs);
         }
 
         public static void ReadFile(string fileName, out string text, out int symbolsCountInRow)
@@ -52,38 +55,48 @@ namespace Task
             {
                 if (textInPairs.Count == 0)
                 {
-                    if (textInWords[i].Length <= symbolsCountInRow)
-                    {
-                        textInPairs.Add(textInWords[i] + " ");
-                    }
-                    else
-                    {
-                        AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[i], symbolsCountInRow);
-                    }
+                    FirstWordProcessing(i, textInWords, textInPairs, symbolsCountInRow);
                 }
                 else
                 {
-                    int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length;
-
-                    if (textInWords[i].Length / 2 >= leftSymbolsAmountInRow)
-                    {
-                        if (textInWords[i].Length <= symbolsCountInRow)
-                        {
-                            textInPairs.Add(textInWords[i].Substring(0, textInWords[i].Length) + " ");
-                        }
-                        else
-                        {
-                            AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[i], symbolsCountInRow);
-                        }
-                    }
-                    else
-                    {
-                        textInPairs[textInPairs.Count - 1] += textInWords[i] + " ";
-                    }
+                    WordsAfterFirstWordProcessing(i, textInWords, textInPairs, symbolsCountInRow);
                 }
             }
 
             return textInPairs;
+        }
+
+        public static void FirstWordProcessing(int index, List<string> textInWords, List<string> textInPairs, int symbolsCountInRow)
+        {
+            if (textInWords[index].Length <= symbolsCountInRow)
+            {
+                textInPairs.Add(textInWords[index] + " ");
+            }
+            else
+            {
+                AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+            }
+        }
+
+        public static void WordsAfterFirstWordProcessing(int index, List<string> textInWords, List<string> textInPairs, int symbolsCountInRow)
+        {
+            int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length;
+
+            if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow)
+            {
+                if (textInWords[index].Length <= symbolsCountInRow)
+                {
+                    textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
+                }
+                else
+                {
+                    AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+                }
+            }
+            else
+            {
+                textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
+            }
         }
 
         public static void AddWordToPartsListWhileReducingWordLength(List<string> textInPairs, string word, int symbolsCountInRow)
