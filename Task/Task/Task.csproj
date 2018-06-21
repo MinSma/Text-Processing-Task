@@ -7,10 +7,14 @@
 
   <ItemGroup>
     <None Remove="duomenys.txt" />
+    <None Remove="wrong_data_for_test.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="duomenys.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wrong_data_for_test.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
