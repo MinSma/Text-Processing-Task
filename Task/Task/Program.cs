@@ -14,6 +14,9 @@ namespace Task
             ReadFile("duomenys.txt", out text, out symbolsCountInRow);
 
             List<string> textInPairs = SplitTextIntoParts(text, symbolsCountInRow);
+
+            PrintToConsole(textInPairs);
+            PrintToFile("rez.txt", textInPairs);
         }
 
         public static void ReadFile(string fileName, out string text, out int symbolsCountInRow)
@@ -103,6 +106,19 @@ namespace Task
                     word = word.Remove(0, word.Length);
                 }
             }
+        }
+
+        public static void PrintToConsole(List<string> textInPairs)
+        {
+            foreach (var t in textInPairs)
+            {
+                Console.WriteLine(t);
+            }
+        }
+
+        public static void PrintToFile(string fileName, List<string> textInPairs)
+        {
+            File.WriteAllLines(fileName, textInPairs);
         }
     }
 }
