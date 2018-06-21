@@ -83,20 +83,27 @@ namespace Task
         {
             int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length; // number of empty space in the row
 
-            if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow) // if word half size is bigger than empty space in the row
+            try
             {
-                if (textInWords[index].Length <= symbolsCountInRow) // if word size is lower than max row size
+                if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow) // if word half size is bigger than empty space in the row
                 {
-                    textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
+                    if (textInWords[index].Length <= symbolsCountInRow) // if word size is lower than max row size
+                    {
+                        textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
+                    }
+                    else // if word size is bigger than max row size
+                    {
+                        AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+                    }
                 }
-                else // if word size is bigger than max row size
+                else // if word half size is lower than empty space in the row
                 {
-                    AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+                    textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
                 }
             }
-            else // if word half size is lower than empty space in the row
+            catch (ArgumentOutOfRangeException)
             {
-                textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
+                throw new ArgumentOutOfRangeException("Error. Trying to value of list which is out of range.");
             }
         }
 
@@ -115,12 +122,19 @@ namespace Task
 
         public static string ReduceWordAndAddWordToList(List<string> textInPairs, string word, int length)
         {
-            // Adds word to list and adds white space at the end of word
-            textInPairs.Add(word.Substring(0, length));
-            textInPairs[textInPairs.Count - 1] += " ";
+            try
+            {
+                // Adds word to list and adds white space at the end of word
+                textInPairs.Add(word.Substring(0, length));
+                textInPairs[textInPairs.Count - 1] += " ";
 
-            // Reduces word by given length
-            return word.Remove(0, length);
+                // Reduces word by given length
+                return word.Remove(0, length);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new ArgumentOutOfRangeException("Error. Tried to reach values of the list which not exist.");
+            }
         }
 
         public static void PrintToConsole(List<string> textInPairs)
