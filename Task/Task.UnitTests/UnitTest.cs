@@ -9,7 +9,7 @@ namespace Task.UnitTests
     public class TaskTests
     {
         [TestMethod]
-        public void ReadFile_IfFileExists_ReturnTwoValues()
+        public void ReadFile_IfFileExists_ShouldReturnTwoValues()
         {
             (string text, int symbolsCountInRow) = Program.ReadFile("duomenys.txt");
 
@@ -19,20 +19,20 @@ namespace Task.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
-        public void ReadFile_IfFileNotExists_GetException()
+        public void ReadFile_IfFileNotExists_ShouldThrowFileNotFoundException()
         {
             (string text, int symbolsCountInRow) = Program.ReadFile("aaaa.txt");
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void ReadFile_IfFileFormatIsWrong_GetException()
+        public void ReadFile_IfFileFormatIsWrong_ShouldThrowFormatException()
         {
             (string text, int symbolsCountInRow) = Program.ReadFile("wrong_data_for_test.txt");
         }
 
         [TestMethod]
-        public void SplitTextIntoParts_IfWorks_ReturnsListWithValues()
+        public void SplitTextIntoParts_IfWorks_ShouldReturnListWithValues()
         {
             List<string> textInPairs = Program.SplitTextIntoParts("þodis þodis þodis", 13);
 
@@ -40,7 +40,7 @@ namespace Task.UnitTests
         }
 
         [TestMethod]
-        public void PrintToFile_IfPrints_CreatesResultsFile()
+        public void PrintToFile_IfWorks_ShoudCreateResultsFile()
         {
             List<string> values = new List<string> { "abc", "adc", "bde", "dea" };
 
@@ -52,7 +52,7 @@ namespace Task.UnitTests
         }
 
         [TestMethod]
-        public void ReduceWordAndAddWordToList_IfWorks_ReducesWordAndPutItInList()
+        public void ReduceWordAndAddWordToList_IfWorks_ShouldReduceWordAndPutItInList()
         {
             List<string> values = new List<string>();
 
@@ -64,7 +64,7 @@ namespace Task.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ReduceWordAndAddWordToList_IfFails_GetException()
+        public void ReduceWordAndAddWordToList_IfFails_ShouldThrowArgumentOutOfRangeException()
         {
             List<string> values = new List<string>();
 
@@ -72,7 +72,7 @@ namespace Task.UnitTests
         }
 
         [TestMethod]
-        public void AddWordToPartsListWhileReducingWordLength_IfWorks_ReturnsWordSplittedIntoList()
+        public void AddWordToPartsListWhileReducingWordLength_IfWorks_ShouldReturnWordSplittedIntoList()
         {
             List<string> values = new List<string>();
             string word = "abbccccddddd";
@@ -83,7 +83,7 @@ namespace Task.UnitTests
         }
 
         [TestMethod]
-        public void FirstWordProcessing_IfWorks_IncreaseList()
+        public void FirstWordProcessing_IfWorks_ShouldIncreaseList()
         {
             List<string> words = new List<string>() { "zodiakas" };
             List<string> parts = new List<string>();
@@ -94,7 +94,7 @@ namespace Task.UnitTests
         }
 
         [TestMethod]
-        public void WordsAfterFirstWordProcessing_IfPartsListNotEmpty_IncreaseList()
+        public void WordsAfterFirstWordProcessing_IfPartsListNotEmpty_ShouldIncreaseList()
         {
             List<string> words = new List<string>() { "zodiakas" };
             List<string> parts = new List<string>() { "la " };
@@ -106,7 +106,7 @@ namespace Task.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void WordsAfterFirstWordProcessing_IfPartsListIsEmpty_IncreaseList()
+        public void WordsAfterFirstWordProcessing_IfPartsListIsEmpty_ShouldThrowArgumentOutOfRangeException()
         {
             List<string> words = new List<string>() { "zodiakas" };
             List<string> parts = new List<string>();
