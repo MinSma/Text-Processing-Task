@@ -37,7 +37,7 @@ namespace Task
             }
             catch (FormatException)
             {
-                Console.WriteLine("Error. Wrong file format!");
+                Console.WriteLine("Error. Wrong file data format!");
             }
         }
 
@@ -58,10 +58,7 @@ namespace Task
                     }
                     else
                     {
-                        textInPairs.Add(textInWords[i].Substring(0, symbolsCountInRow));
-                        textInWords[i] = textInWords[i].Remove(0, symbolsCountInRow);
-
-                        WhileWordLengthMoreThenZero(textInPairs, textInWords[i], symbolsCountInRow);
+                        AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[i], symbolsCountInRow);
                     }
                 }
                 else
@@ -70,13 +67,13 @@ namespace Task
 
                     if (textInWords[i].Length / 2 >= leftSymbolsAmountInRow)
                     {
-                        if (symbolsCountInRow >= textInWords[i].Length)
+                        if (textInWords[i].Length <= symbolsCountInRow)
                         {
                             textInPairs.Add(textInWords[i].Substring(0, textInWords[i].Length) + " ");
                         }
                         else
                         {
-                            WhileWordLengthMoreThenZero(textInPairs, textInWords[i], symbolsCountInRow);
+                            AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[i], symbolsCountInRow);
                         }
                     }
                     else
@@ -89,23 +86,22 @@ namespace Task
             return textInPairs;
         }
 
-        public static void WhileWordLengthMoreThenZero(List<string> textInPairs, string word, int symbolsCountInRow)
+        public static void AddWordToPartsListWhileReducingWordLength(List<string> textInPairs, string word, int symbolsCountInRow)
         {
             while (word.Length > 0)
             {
-                if (word.Length >= symbolsCountInRow)
-                {
-                    textInPairs.Add(word.Substring(0, symbolsCountInRow));
-                    textInPairs[textInPairs.Count - 1] += " ";
-                    word = word.Remove(0, symbolsCountInRow);
-                }
-                else
-                {
-                    textInPairs.Add(word.Substring(0, word.Length));
-                    textInPairs[textInPairs.Count - 1] += " ";
-                    word = word.Remove(0, word.Length);
-                }
+                word = word.Length >= symbolsCountInRow ? 
+                    ReduceWordAndAddWordToList(textInPairs, word, symbolsCountInRow) : 
+                    ReduceWordAndAddWordToList(textInPairs, word, word.Length);
             }
+        }
+
+        public static string ReduceWordAndAddWordToList(List<string> textInPairs, string word, int length)
+        {
+            textInPairs.Add(word.Substring(0, length));
+            textInPairs[textInPairs.Count - 1] += " ";
+
+            return word.Remove(0, length);
         }
 
         public static void PrintToConsole(List<string> textInPairs)
