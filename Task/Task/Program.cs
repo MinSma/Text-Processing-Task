@@ -4,17 +4,14 @@ using System.IO;
 
 namespace Task
 {
-    class Program
+    public class Program
     {
         const string PRIMARY_DATA_FILE = "duomenys.txt";
         const string RESULTS_DATA_FILE = "rez.txt";
 
         static void Main(string[] args)
         {
-            string text;
-            int symbolsCountInRow;
-
-            (text, symbolsCountInRow) = ReadFile(PRIMARY_DATA_FILE);
+            (string text, int symbolsCountInRow) = ReadFile(PRIMARY_DATA_FILE);
 
             List<string> textInPairs = SplitTextIntoParts(text, symbolsCountInRow);
 
@@ -36,11 +33,11 @@ namespace Task
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Error. File not found!");
+                throw new FileNotFoundException("Error. File not found");
             }
             catch (FormatException)
             {
-                Console.WriteLine("Error. Wrong file data format!");
+                throw new FormatException("Error. Wrong file data format");
             }
 
             return (text, symbolsCountInRow);
