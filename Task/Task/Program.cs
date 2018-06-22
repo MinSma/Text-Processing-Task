@@ -71,6 +71,7 @@ namespace Task
             // if there is enough room for word to fill in one row
             if (textInWords[index].Length <= symbolsCountInRow)
             {
+                // add word to new line of text pairs list
                 textInPairs.Add(textInWords[index] + " ");
             }
             else // if there is not enough room for word to fill in one row
@@ -89,6 +90,7 @@ namespace Task
                 {
                     if (textInWords[index].Length <= symbolsCountInRow) // if word size is lower than max row size
                     {
+                        // add word to new line of text pairs list
                         textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
                     }
                     else // if word size is bigger than max row size
@@ -98,6 +100,7 @@ namespace Task
                 }
                 else // if word half size is lower than empty space in the row
                 {
+                    // add word to last used line of text pairs list
                     textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
                 }
             }
