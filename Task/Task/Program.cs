@@ -15,7 +15,7 @@ namespace Task
 
             TextConverter textConverter = new TextConverter();
 
-            List<string> textInPairs = textConverter.SplitTextIntoParts("", symbolsCountInRow);
+            List<string> textInPairs = textConverter.SplitTextIntoParts(PRIMARY_DATA_FILE, symbolsCountInRow);
 
             PrintToConsole(textInPairs);
             PrintToFile(RESULTS_DATA_FILE, textInPairs);
