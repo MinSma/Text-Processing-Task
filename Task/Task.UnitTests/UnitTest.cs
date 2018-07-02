@@ -13,8 +13,21 @@ namespace Task.UnitTests
         {
             (string text, int symbolsCountInRow) = Program.ReadFile("duomenys.txt");
 
-            Assert.AreEqual(13, symbolsCountInRow);
-            Assert.AreEqual("þodis þodis þodis", text);
+            Assert.AreEqual(8, symbolsCountInRow);
+            Assert.AreEqual("Padarëme darbà, kurá turëjome padaryti gynyboje – tai ir padëjo laimëti. Rungtynës nebuvo idealios, " +
+                "taèiau ágyvendinome savo planà ir savo sàskaitoje turime dar vienà pergalæ. Judame, padedame vienas kitam, vyksta " +
+                "kaþkokios gynybinës rotacijos. Randome kaip uþkaiðyti skyles, tai mums ir padeda apsiginti ir laimëti“, – rimtai " +
+                "interviu pradþioje kalbëjo vidurio puolëjas. Lietuvos rinktinë didþiàjà rungtyniø dalá savo þaidimà grindë per " +
+                "aukðtaûgius. Paklaustas, ar nepavargo, J. Valanèiûnas prajuko. „Þaidþiame po 15 minuèiø, mums dar po 25 metus – " +
+                "negalime pavargti“, – paþymëjo jis. Netrukus juoko buvo dar daugiau, nes bekalbantá Jonà ið tribûnø pertraukë " +
+                "krepðininko vardà ir pavardæ ëmæ skanduoti Lietuvos krepðinio sirgaliai. „Labai trukdo uþ manæs esantys susikaupti. " +
+                "Tie kaþkokie þali þmogeliukai, – juokësi J. Valanèiûnas. – Að manau, kad mes dël tø þmoniø ir þaidþiame. Fanø, kurie " +
+                "liko Lietuvoje ir kurie atvaþiavo èia. Eina pagaugai, ane? Kai girdi tokius dalykus, dël to ir þaidi.“ Paklaustas, " +
+                "ar padës rinktinei per kità atrankos varþybø „langà“ rugsëjo mënesá, JV tvirtino turintis pasikonsultuoti su Kanados " +
+                "klubo atstovais. „Sësim su „Raptors“ klubu, þiûrësime kada yra pasiruoðimas sezonui, kada suplanuota treniruoèiø " +
+                "stovykla. Jeigu tik laikas leis, bûtinai“, – teigë aukðtaûgis. Kitame atrankos varþybø cikle Lietuvos rinktinei " +
+                "teks þaisti su Italijos, Kroatijos ir Nyderlandø rinktinëmis. Lietuviai jau dabar yra tapæ vienvaldþiais naujai " +
+                "suformuotos J grupës lyderiais, artimiausius persekiotojus lenkdami 2 taðkais.", text);
         }
 
         [TestMethod]
@@ -34,84 +47,44 @@ namespace Task.UnitTests
         [TestMethod]
         public void SplitTextIntoParts_IfWorks_ShouldReturnListWithValues()
         {
-            List<string> textInPairs = Program.SplitTextIntoParts("þodis þodis þodis", 13);
+            TextConverter textConverter = new TextConverter();
 
-            Assert.AreEqual(2, textInPairs.Count);
+            List<string> textInPairs = textConverter.SplitTextIntoParts("þodis þodis þodis", 13);
+
+            CollectionAssert.AreEqual(new List<string> { "þodis þodis ", "þodis" }, textInPairs);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SplitTextIntoParts_IfSymbolsCountInRowNumberIsLessThenZero_ShouldBeArgumentOfRangeException()
+        {
+            TextConverter textConverter = new TextConverter();
+
+            List<string> textInPairs = textConverter.SplitTextIntoParts("þodis þodis þodis", -1);
+        }
+
+        [TestMethod]
+        public void SplitTextIntoParts_IfTextNotExist_ShouldReturnListWithFirstClearEment()
+        {
+            TextConverter textConverter = new TextConverter();
+
+            List<string> textInPairs = textConverter.SplitTextIntoParts("", 10);
+
+            Assert.AreEqual("", textInPairs[0]);
         }
 
         [TestMethod]
         public void PrintToFile_IfWorks_ShoudCreateResultsFile()
         {
-            List<string> values = new List<string> { "abc", "adc", "bde", "dea" };
+            TextConverter textConverter = new TextConverter();
 
-            Program.PrintToFile("rez.txt", values);
+            List<string> textInPairs = textConverter.SplitTextIntoParts("þodis þodis þodis", 13);
+
+            Program.PrintToFile("rez.txt", textInPairs);
 
             string[] lines = File.ReadAllLines("rez.txt");
 
-            Assert.AreEqual(4, lines.Length);
-        }
-
-        [TestMethod]
-        public void ReduceWordAndAddWordToList_IfWorks_ShouldReduceWordAndPutItInList()
-        {
-            List<string> values = new List<string>();
-
-            string word = Program.ReduceWordAndAddWordToList(values, "abbbbbbbbcd", 5);
-
-            Assert.AreEqual("abbbb ", values[0]);
-            Assert.AreEqual(6, word.Length);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ReduceWordAndAddWordToList_IfFails_ShouldThrowArgumentOutOfRangeException()
-        {
-            List<string> values = new List<string>();
-
-            string word = Program.ReduceWordAndAddWordToList(values, "abc", 5);
-        }
-
-        [TestMethod]
-        public void AddWordToPartsListWhileReducingWordLength_IfWorks_ShouldReturnWordSplittedIntoList()
-        {
-            List<string> values = new List<string>();
-            string word = "abbccccddddd";
-
-            Program.AddWordToPartsListWhileReducingWordLength(values, word, 3);
-
-            Assert.AreEqual(4, values.Count);
-        }
-
-        [TestMethod]
-        public void FirstWordProcessing_IfWorks_ShouldIncreaseList()
-        {
-            List<string> words = new List<string>() { "zodiakas" };
-            List<string> parts = new List<string>();
-
-            Program.FirstWordProcessing(0, words, parts, 5);
-
-            Assert.AreEqual(2, parts.Count);
-        }
-
-        [TestMethod]
-        public void WordsAfterFirstWordProcessing_IfPartsListNotEmpty_ShouldIncreaseList()
-        {
-            List<string> words = new List<string>() { "zodiakas" };
-            List<string> parts = new List<string>() { "la " };
-
-            Program.WordsAfterFirstWordProcessing(0, words, parts, 5);
-
-            Assert.AreEqual(3, parts.Count);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void WordsAfterFirstWordProcessing_IfPartsListIsEmpty_ShouldThrowArgumentOutOfRangeException()
-        {
-            List<string> words = new List<string>() { "zodiakas" };
-            List<string> parts = new List<string>();
-
-            Program.WordsAfterFirstWordProcessing(0, words, parts, 5);
+            Assert.AreEqual(2, lines.Length);
         }
     }
 }
