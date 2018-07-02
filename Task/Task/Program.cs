@@ -73,18 +73,14 @@ namespace Task
         {
             int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length; // number of empty space in the row
 
+            if (textInWords[index].Length > leftSymbolsAmountInRow){ // if word size is bigger than empty space in the row
+                if (leftSymbolsAmountInRow > textInWords[index].Length / 2)
+                {
+                    textInPairs[textInPairs.Count - 1] += textInWords[index].Substring(0, leftSymbolsAmountInRow);
+                    textInWords[index] = textInWords[index].Remove(0, leftSymbolsAmountInRow);
+                }
 
-            if (textInWords[index].Length / 2 >= leftSymbolsAmountInRow) // if word half size is bigger than empty space in the row
-            {
-                if (textInWords[index].Length <= symbolsCountInRow) // if word size is lower than max row size
-                {
-                    // add word to new line of text pairs list
-                    textInPairs.Add(textInWords[index].Substring(0, textInWords[index].Length) + " ");
-                }
-                else // if word size is bigger than max row size
-                {
-                    AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
-                }
+                AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
             }
             else // if word half size is lower than empty space in the row
             {
