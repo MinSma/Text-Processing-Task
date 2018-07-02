@@ -61,11 +61,13 @@ namespace Task
             if (textInWords[index].Length <= symbolsCountInRow)
             {
                 // add word to new line of text pairs list
-                textInPairs.Add(textInWords[index] + " ");
+                textInPairs.Add(textInWords[index]);
+                textInPairs[textInPairs.Count - 1] += IfNotLastAddWhiteSpace(index, textInWords.Count - 1);
             }
             else // if there is not enough room for word to fill in one row
             {
                 AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+                textInPairs[textInPairs.Count - 1] += IfNotLastAddWhiteSpace(index, textInWords.Count - 1);
             }
         }
 
@@ -74,18 +76,20 @@ namespace Task
             int leftSymbolsAmountInRow = symbolsCountInRow - textInPairs[textInPairs.Count - 1].Length; // number of empty space in the row
 
             if (textInWords[index].Length > leftSymbolsAmountInRow){ // if word size is bigger than empty space in the row
-                if (leftSymbolsAmountInRow > textInWords[index].Length / 2)
+                if (leftSymbolsAmountInRow >= textInWords[index].Length / 2)
                 {
                     textInPairs[textInPairs.Count - 1] += textInWords[index].Substring(0, leftSymbolsAmountInRow);
                     textInWords[index] = textInWords[index].Remove(0, leftSymbolsAmountInRow);
                 }
 
                 AddWordToPartsListWhileReducingWordLength(textInPairs, textInWords[index], symbolsCountInRow);
+                textInPairs[textInPairs.Count - 1] += IfNotLastAddWhiteSpace(index, textInWords.Count - 1);
             }
             else // if word half size is lower than empty space in the row
             {
                 // add word to last used line of text pairs list
-                textInPairs[textInPairs.Count - 1] += textInWords[index] + " ";
+                textInPairs[textInPairs.Count - 1] += textInWords[index];
+                textInPairs[textInPairs.Count - 1] += IfNotLastAddWhiteSpace(index, textInWords.Count - 1);
             }
 
         }
@@ -107,10 +111,19 @@ namespace Task
         {
             // Adds word to list and adds white space at the end of word
             textInPairs.Add(word.Substring(0, length));
-            textInPairs[textInPairs.Count - 1] += " ";
 
             // Reduces word by given length
             return word.Remove(0, length);
+        }
+
+        public static string IfNotLastAddWhiteSpace(int index, int count)
+        {
+            if(index < count)
+            {
+                return " ";
+            }
+
+            return "";
         }
 
         public static void PrintToConsole(List<string> textInPairs)
