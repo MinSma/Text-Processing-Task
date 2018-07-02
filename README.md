@@ -2,9 +2,8 @@
 
 Užduotį sprendžiau Visual Studio aplinkoje, naudojantis .NET Core Console aplikacija. 
 
-Pradžioje vos pamačius užduotį buvo šovusi idėja, žodžius sudarinėti besukant ciklą, bet kadangi užduotyje neužsiminta nieko 
-apie skyrybos ženklus, todėl pasirinkau variantą, kad žodžius iškart galima skaidyti į sąrašą ir atsižvelgiant į maksimalų eilutės ilgį 
-teksto ilgį rezultate yra dėliojamas į teksto dalių sąrašą. 
+Pradžioje vos pamačius užduotį buvo šovusi idėja, žodžius sudarinėti besukant ciklą, bet pasirinkau variantą, kad žodžius iškart galima skaidyti į 
+sąrašą ir atsižvelgiant į maksimalų eilutės ilgį yra dėliojamas į teksto dalių sąrašą. 
 
 Žodžiai yra dedami likusioje eilutės dalyje, tik tuo atveju, jeigu pusės žodžio 
 ilgis yra lygus arba didesnis už likusią laisvą vietą eilutėje, kitu atveju žodis yra įrašomas naujoje eilutėje. 
